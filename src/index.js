@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.hydrate(
+  <App />,
   document.getElementById('root')
 );
 
