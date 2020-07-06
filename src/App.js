@@ -2,12 +2,12 @@ import React from 'react';
 import NewsGrid from './components/NewsGrid';
 import { withRouter } from 'react-router-dom'
 
-function App({history}) {
+function App() {
   return (
     <div>
-      <NewsGrid history={history}/>
+      <NewsGrid />
     </div>
   );
 }
 
-export default withRouter(App);
+export default App;

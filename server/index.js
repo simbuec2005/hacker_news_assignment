@@ -5,7 +5,7 @@ import React from 'react';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, matchPath, Route } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider as ReduxProvider } from "react-redux";
 // import { StaticRouter, matchPath } from "react-router-dom";
 
 import App from '../src/App';
@@ -15,7 +15,7 @@ import { fetchNewsApi } from '../src/services/api';
 
 
 
-const PORT = 3006;
+const PORT = 3000;
 const app = express();
 
 app.use(express.static('./build'));
@@ -26,21 +26,38 @@ app.get('/*', (req, res) => {
 
     const store = configureStore();
     const dataPromise = store.dispatch(fetchNewsApi(req.query));
+    const indexFile = path.resolve('./build/index.html');
+    
 
     dataPromise.then((data) => {
         const jsx = (
-            <Provider store={store}>
-                <StaticRouter context={{}} location={req.url}>
-                    <Route path="/" component={App} />
-                </StaticRouter>
-            </Provider>
+            <ReduxProvider store={store}>
+                <App />
+            </ReduxProvider>
         );
         reactDom = renderToString(jsx);
         const reduxState = store.getState();
 
-        console.log('server');
+        
+        return fs.readFile(indexFile, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Something went wrong:', err);
+                return res.status(500).send('Oops, better luck next time!');
+            }
+    
+            return res.send(
+                data.replace('<div id="root"></div>', `<div id="root">${reactDom}<script>
+                // WARNING: See the following for security issues around embedding JSON in HTML:
+                // https://redux.js.org/recipes/server-rendering/#security-considerations
+                window.data = ${JSON.stringify(reduxState).replace(
+                /</g,
+                '\\u003c'
+            )}
+              </script></div>`)
+            );
+        });
 
-        res.end(renderFullPage(reduxState));
+        // res.send(renderFullPage(reduxState));
     })
 });
 
@@ -48,7 +65,6 @@ function renderFullPage(preloadedState) {
 
 
     return `
-      <!doctype html>
       <html>
         <head>
           <title>Redux Universal Example</title>

@@ -1,5 +1,6 @@
 .gridContainer {
   display: flex;
+  flex-direction: column;
 }
 
 .row {
@@ -7,5 +8,8 @@
 }
 
 .col {
+  padding: 10px;
+}
+.col:last-child {
   flex: 1;
 }

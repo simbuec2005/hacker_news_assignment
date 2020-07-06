@@ -50,15 +50,14 @@ function NewsGrid({ news, history }) {
                 </div>
             </div>
 
-            {prev >= 0 && <Link to={prevQuery} className="link">Previous</Link>}
-            {next <= nbPages && <Link to={nextQuery} className="link">Next</Link>}
+            {prev >= 0 && <a href={prevQuery} className="link">Previous</a>}
+            {next <= nbPages && <a href={nextQuery} className="link">Next</a>}
 
         </div>
     )
 }
 
 export default connect((state) => {
-
     return {
         news: state.news
     }

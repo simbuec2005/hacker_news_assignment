@@ -2,7 +2,6 @@ import fetch from "isomorphic-fetch";
 import { getNewsSuccess, getNews } from "../actions";
 
 export const fetchNewsApi = (query) => (dispatch) => {
-    console.log(query);
     let url = 'http://hn.algolia.com/api/v1/search_by_date';
     if (query) {
         const qs = Object.keys(query).map((key) => {
