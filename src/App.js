@@ -1,12 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
+import NewsGrid from './components/NewsGrid';
+import { withRouter } from 'react-router-dom'
 
-function App() {
+function App({history}) {
   return (
     <div>
-      Test
+      <NewsGrid history={history}/>
     </div>
   );
 }
 
-export default App;
+export default withRouter(App);

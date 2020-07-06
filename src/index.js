@@ -1,16 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Provider as ReduxProvider } from "react-redux";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import routes from './routes';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
-const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+import { configureStore } from './store';
+// Grab the state from a global variable injected into the server-generated HTML
+const preloadedState = {};
 
-ReactDOM.hydrate(
-  <App />,
-  document.getElementById('root')
+// Allow the passed state to be garbage-collected
+// delete window.__PRELOADED_STATE__
+
+const store = configureStore(preloadedState)
+// store.runSaga(rootSaga)
+console.log('client');
+
+const jsx = (
+  <ReduxProvider store={store}>
+    <Router>
+      <Switch>
+        <Route path="/search" component={App} />
+      </Switch>
+    </Router>
+  </ReduxProvider>
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const app = document.getElementById("root");
+ReactDOM.hydrate(jsx, app);
