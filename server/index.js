@@ -56,34 +56,8 @@ app.get('/*', (req, res) => {
               </script></div>`)
             );
         });
-
-        // res.send(renderFullPage(reduxState));
     })
 });
-
-function renderFullPage(preloadedState) {
-
-
-    return `
-      <html>
-        <head>
-          <title>Redux Universal Example</title>
-        </head>
-        <body>
-          <div id="root">${reactDom}</div>
-          <script>
-            // WARNING: See the following for security issues around embedding JSON in HTML:
-            // https://redux.js.org/recipes/server-rendering/#security-considerations
-            window.data = ${JSON.stringify(preloadedState).replace(
-            /</g,
-            '\\u003c'
-        )}
-          </script>
-          <script src="/static/bundle.js"></script>
-        </body>
-      </html>
-      `
-}
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
